@@ -1,0 +1,31 @@
+@model BlogApplication.Models.Auth.RegisterRequest
+@{
+    ViewBag.Title = "Регистрация";
+}
+
+<div class="card">
+    <div class="card-header">
+        Регистрация
+    </div>
+    <div class="card-body">
+        <form asp-controller="Auth" asp-action="Register" asp-antiforgery="true">
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email</label>
+                <input type="email" class="form-control" asp-for="Email" placeholder="user@user.ru">
+                <span style="color: red" asp-validation-for="Email"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Пароль</label>
+                <input type="password" class="form-control" asp-for="Password" placeholder="*********">
+                <span style="color: red" asp-validation-for="Password"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="FullName" class="form-label">Имя</label>
+                <input type="text" class="form-control" asp-for="FullName" placeholder="Иванов Иван">
+                <span style="color: red" asp-validation-for="FullName"></span>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Зарегистрироватсья</button>
+        </form>
+    </div>
+</div>

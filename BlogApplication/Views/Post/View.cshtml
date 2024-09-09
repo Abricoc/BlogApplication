@@ -1,0 +1,77 @@
+﻿@using System.Security.Claims
+@model BlogApplication.Data.Entities.Post
+@{
+    ViewData["Title"] = "Главная";
+}
+
+@if (User.FindFirstValue(ClaimTypes.PrimarySid) == Model.Author.Id.ToString())
+{
+    <div class="row mb-1">
+        <div class="col-2">
+            <a class="btn btn-primary w-100" asp-controller="Post" asp-action="Edit" asp-route-id="@Model.Id">Редактировать пост</a>
+        </div>
+        <div class="col-2">
+            <a class="btn btn-danger w-100" asp-controller="Post" asp-action="Delete" asp-route-id="@Model.Id">Удалить пост</a>
+        </div>
+    </div>
+}
+
+<div class="card">
+    <div class="card-header">
+        @Model.Title
+    </div>
+    <div class="card-body">
+        @Model.Content
+        <div>
+            @foreach (var tag in Model.Tags)
+            {
+                <span class="badge rounded-pill bg-primary">@tag.Name</span>
+            }
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="row">
+            <div class="col">
+                @Model.CreatedAt
+            </div>
+            <div class="col text-end">
+                <a asp-action="Profile" asp-controller="Auth">@Model.Author.FullName</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-3">
+    <div class="card-header">
+        Комментарии
+    </div>
+    @if (User.Identity is { IsAuthenticated: true })
+    {
+        <div class="card-body">
+            <form asp-controller="Comment" asp-action="Create" method="post">
+                <div class="row">
+                    <div class="col-10">
+                        <input type="hidden" name="postId" value="@Model.Id.ToString()">
+                        <input class="form-control" name="commentText" type="text">
+                    </div>
+                    <div class="col-2">
+                        <input class="btn btn-outline-primary w-100" type="submit">
+                    </div>
+                </div>
+            </form>
+        </div>
+    }
+    <div class="card-footer">
+        @foreach (var comment in Model.Comments.OrderByDescending(c => c.CreatedAt).ToList())
+        {
+            <div class="row m-1 p-2 border-bottom">
+                <div class="col-10">
+                    @comment.Content
+                </div>
+                <div class="col-2">
+                    @comment.CreatedAt
+                </div>
+            </div>
+        }
+    </div>
+</div>

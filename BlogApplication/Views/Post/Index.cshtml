@@ -1,0 +1,40 @@
+﻿@model BlogApplication.Models.Posts.PostListModel
+@{
+    ViewData["Title"] = "Главная";
+}
+
+<div class="row m-1">
+    <div class="col-9">
+        <form asp-controller="Post" asp-action="Index" method="get">
+            <div class="row">
+                <div class="col">
+                    <select class="form-select" name="tag" aria-label="Выберите тэг для поиска">
+                        <option selected value="">Выберите тэг для поиска</option>
+                        @foreach (var tag in Model.Tags)
+                        {
+                            <option >@tag.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="col"><button class="btn btn-warning" type="submit">Найти</button></div>
+            </div>
+        </form>
+    </div>
+    @if (User.Identity is { IsAuthenticated: true })
+    {
+        <div class="col">
+            <a class="btn btn-primary" asp-controller="Post" asp-action="Create">Создать пост</a>
+        </div>
+    }
+</div>
+<div class="row m-2">
+    @foreach (var post in Model.Posts)
+    {
+        <div class="card m-1">
+            <div class="card-body">
+                <h5 class="card-title">@post.Title</h5>
+                <a asp-controller="Post" asp-action="View" asp-route-id="@post.Id">Подробнее</a>
+            </div>
+        </div>
+    }
+</div>
